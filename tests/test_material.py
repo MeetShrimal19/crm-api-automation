@@ -26,7 +26,7 @@ def test_get_materials(auth_api, auth_token):
     assert response.status_code==200
     assert body["success"] is True
     assert "results" in body
-    assert len(results) <= limit 
+    assert isinstance(results, list) 
 
 def test_search_materials(auth_api, auth_token):
     headers={

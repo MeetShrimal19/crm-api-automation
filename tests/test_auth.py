@@ -21,8 +21,9 @@ def test_verify_otp(auth_api):
         "Authorization": f"Bearer {token}"
     }
 
+    import random
     payload={
-        "name":"new category",
+        "name":f"new category_{random.randint(1000, 9999)}",
         "category_type":"product"
     }
 
