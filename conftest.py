@@ -1,12 +1,12 @@
 import pytest
 from api.auth_api import AuthAPI
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def auth_api():
     base_url ="https://dev-api.profitmanager.in"
     return AuthAPI(base_url)
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def auth_token(auth_api):
     email ="shrimalmeet2001@gmail.com"
     otp="123456"
