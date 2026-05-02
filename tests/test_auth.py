@@ -32,15 +32,15 @@ def test_verify_otp(auth_api):
 
     print("Token:", token)
 
-    def test_create_category(auth_api, auth_token):
-        headers={
-            "Authorization": f"Bearer{auth_token}"
+def test_create_category(auth_api, auth_token):
+    headers={
+            "Authorization": f"Bearer {auth_token}"
         }
 
-        payload ={
+    payload ={
             "name":"Electronics",
             "category_type": "product"
         }
 
-        response = auth_api.post("/api/v1/business/category/create", headers=headers,json=payload)
-        assert response.status_code==200
+    response = auth_api.post("/api/v1/business/category/create", headers=headers,json=payload)
+    assert response.status_code==200

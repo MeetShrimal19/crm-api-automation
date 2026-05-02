@@ -45,7 +45,7 @@ def test_search_materials(auth_api, auth_token):
 
 def test_get_material_category(auth_api,auth_token):
     headers={
-        "Authorization":f"bearer {auth_token}"
+        "Authorization":f"Bearer {auth_token}"
     }
 
     response = auth_api.get_materials(category_type="product", headers=headers)

@@ -13,7 +13,7 @@ class AuthAPI(BaseAPI):
         endpoint = "/api/v1/business/auth/verify-otp"
         payload={
             "email": email,
-            "otp": "123456" 
+            "otp": otp 
         }
         return self.post(endpoint, json=payload)
         

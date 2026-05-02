@@ -93,7 +93,7 @@ def test_delete_supplier(auth_api, auth_token):
     phone_number = random.randint(6000000000, 9999999999)
     create_payload={
             "name":"Vinoth",
-            "phone":"phone_number"
+            "phone":str(phone_number)
         }
         
     create_response = auth_api.post("/api/v1/business/supplier/create", headers=headers, json=create_payload)
