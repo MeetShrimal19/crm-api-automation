@@ -29,4 +29,4 @@ def auth_token(auth_api):
 def authorized_api(auth_api, auth_token):
     auth_api.set_token(auth_token)
     yield auth_api
-    auth_api.session.headers.pop("Authorization", None)
+    auth_api.session.headers.pop("Authorization", None) 

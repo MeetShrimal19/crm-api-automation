@@ -83,3 +83,21 @@ class AuthAPI(BaseAPI):
         }
 
         return self.get(endpoint, headers=headers, params=params)
+
+    def get_purchase_by_id(self, purchaseId):
+        endpoint = "/api/v1/business/purchase/getByID"
+        params={
+            "purchaseId": purchaseId
+        }
+        return self.get(endpoint, params=params)
+
+    def put_purchase(self, purchaseId, payload):
+        endpoint="/api/v1/business/purchase/update"
+        return self.put(endpoint, json=payload)
+
+    def delete_purchase(self, purchaseId):
+        endpoint = "/api/v1/business/purchase/delete"
+        params={
+            "purchaseId": purchaseId
+        }
+        return self.delete(endpoint, params=params)

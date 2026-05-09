@@ -73,3 +73,37 @@ def test_get_purchase(auth_api, auth_token):
 
     assert isinstance(purchase_list, list)
     assert len(purchase_list) <= 5
+
+def test_get_by_purchaseId(authorized_api):
+
+    logger.info("Getting the list of purchase API")
+    response = authorized_api.get_purchase(page= 1, limit = 10)
+    assert response.status_code == 200
+    data = response.json()
+    purchase_list = data["results"]["data"]
+    random_purchaseId = random.choice(purchase_list)
+    purchaseId = random_purchaseId["id"]
+    logger.info(f"Random purchase ID selected: {purchaseId}")
+
+    logger.info("Validating the purcase ID which we got from above response")
+    response_purchaseId = authorized_api.get_purchase_by_id(purchaseId=purchaseId)
+    data = response_purchaseId.json()
+    assert response_purchaseId.status_code == 200
+    assert data["message"]=="Purchase retrieved successfully"
+    assert data["results"]["purchase"]["id"]==purchaseId
+    logger.info(f"Verifiled purchase ID:{purchaseId}")
+
+
+def test_delete_purchase(authorized_api):
+
+    response_purchaseId = authorized_api.get_purchase(page =1, limit = 10)
+    assert response_purchaseId.status_code == 200
+    data = response_purchaseId.json()
+    purchaselist = data["results"]["data"]
+    random_purchaseId = random.choice(purchaselist)
+    purchaseId = random_purchaseId["id"]
+    delete_response = authorized_api.delete_purchase(purchaseId=purchaseId)
+    assert delete_response.status_code==200
+    delete_data = delete_response.json()
+    assert delete_data["message"] == "Purchase deleted successfully"
+    logger.info(f"Deleted purchase ID: {purchaseId}")
