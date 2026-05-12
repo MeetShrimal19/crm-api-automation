@@ -1,24 +1,17 @@
 import random
-def test_create_material(auth_api, auth_token):
-    headers={
-        "Authorization": f"Bearer {auth_token}",
-        "Content-Type":"application/json"
-    }
+def test_create_material(authorized_api):
 
     payload={
         "name":f"Cotton_{random.randint(1000,9999)}"
     }
 
-    response = auth_api.post("/api/v1/business/material/create", headers=headers, json=payload)
+    response = authorized_api.post("/api/v1/business/material/create", json=payload)
 
     assert response.status_code == 200
 
-def test_get_materials(auth_api, auth_token):
-    headers ={
-        "Authorization":f"Bearer {auth_token}"
-    }
+def test_get_materials(authorized_api):
 
-    response = auth_api.get_materials(page=1, limit=5, headers=headers)
+    response = authorized_api.get_materials(page=1, limit=5)
     limit = 5
     body = response.json()
     results = body["results"]
@@ -28,12 +21,9 @@ def test_get_materials(auth_api, auth_token):
     assert "results" in body
     assert isinstance(results, list) 
 
-def test_search_materials(auth_api, auth_token):
-    headers={
-        "Authorization": f"Bearer {auth_token}"
-    }
+def test_search_materials(authorized_api):
 
-    response = auth_api.get_materials(search="cotton", headers=headers, page=1, limit= 5)
+    response = authorized_api.get_materials(search="cotton", page=1, limit= 5)
     body = response.json()
     results = body["results"]
 
@@ -43,12 +33,9 @@ def test_search_materials(auth_api, auth_token):
     for item in results:
         assert "cotton" in item["name"].lower()
 
-def test_get_material_category(auth_api,auth_token):
-    headers={
-        "Authorization":f"Bearer {auth_token}"
-    }
+def test_get_material_category(authorized_api):
 
-    response = auth_api.get_materials(category_type="product", headers=headers)
+    response = authorized_api.get_materials(category_type="product")
 
     body = response.json()
     assert response.status_code==200

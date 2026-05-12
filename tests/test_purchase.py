@@ -4,13 +4,10 @@ from utils.logger import get_logger
 logger = get_logger()
 
 
-def test_post_purchase(auth_api, auth_token):
-    headers = {
-        "Authorization": f"Bearer {auth_token}"
-    }
+def test_post_purchase(authorized_api):
 
     # Get suppliers
-    res = auth_api.get_supplier(page=1, limit=5, headers=headers)
+    res = authorized_api.get_supplier(page=1, limit=5)
     assert res.status_code == 200
 
     data = res.json()
@@ -29,7 +26,7 @@ def test_post_purchase(auth_api, auth_token):
     logger.info(f"Creating purchase → qty={quantity}, price={cost_price}, amount={amount_paid}")
 
     # Create purchase
-    response = auth_api.add_purchase(
+    response = authorized_api.add_purchase(
         supplier_id=supplier_id,
         product_id=1,
         quantity=quantity,
@@ -37,7 +34,6 @@ def test_post_purchase(auth_api, auth_token):
         payment_date="2026-01-15",
         payment_status="paid",
         amount_paid=amount_paid,
-        headers=headers
     )
 
     logger.info(f"Purchase Response: {response.text}")
@@ -50,14 +46,11 @@ def test_post_purchase(auth_api, auth_token):
     assert data["message"] == "Purchase added successfully"
 
 
-def test_get_purchase(auth_api, auth_token):
-    headers = {
-        "Authorization": f"Bearer {auth_token}"
-    }
+def test_get_purchase(authorized_api):
 
     logger.info("Fetching purchase list")
 
-    response = auth_api.get_purchase(page=1, limit=5, headers=headers)
+    response = authorized_api.get_purchase(page=1, limit=5)
     logger.info(f"GET Purchase Response: {response.text}")
 
     assert response.status_code == 200
