@@ -1,5 +1,11 @@
+import os
+from api.supplier_api import SupplierAPI
+
+base_url = os.getenv('BASE_URL')
 import random
-def test_create_supplier(authorized_api):
+def test_create_supplier(auth_token):
+    authorized_api = SupplierAPI(base_url)
+    authorized_api.set_token(auth_token)
     endpoint="/api/v1/business/supplier/create"
 
     random_phone = str(random.randint(6000000000, 9999999999))
@@ -17,7 +23,9 @@ def test_create_supplier(authorized_api):
     assert body["success"] is True 
     assert body["message"] == "Supplier added successfully"
 
-def test_supplier_pagination(authorized_api):
+def test_supplier_pagination(auth_token):
+    authorized_api = SupplierAPI(base_url)
+    authorized_api.set_token(auth_token)
 
     response = authorized_api.get_supplier(page=1, limit=3)
     limit = 3
@@ -33,7 +41,9 @@ def test_supplier_pagination(authorized_api):
     print(limit)
 
 
-def test_update_supplier(authorized_api):
+def test_update_supplier(auth_token):
+    authorized_api = SupplierAPI(base_url)
+    authorized_api.set_token(auth_token)
     supplier_id= 2555
 
     payload={
@@ -46,7 +56,9 @@ def test_update_supplier(authorized_api):
     assert response.status_code == 200
     assert body["success"] is True 
 
-def test_updated_supplier(authorized_api):
+def test_updated_supplier(auth_token):
+    authorized_api = SupplierAPI(base_url)
+    authorized_api.set_token(auth_token)
 
     random_phone = str(random.randint(6000000000, 9999999999))
     create_payload={
@@ -74,7 +86,9 @@ def test_updated_supplier(authorized_api):
             updated = True
     assert updated is True
 
-def test_delete_supplier(authorized_api):
+def test_delete_supplier(auth_token):
+    authorized_api = SupplierAPI(base_url)
+    authorized_api.set_token(auth_token)
     phone_number = random.randint(6000000000, 9999999999)
     create_payload={
             "name":"Vinoth",

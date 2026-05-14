@@ -1,9 +1,15 @@
+import os
+from api.materials_api import MaterialAPi
+
+base_url = os.getenv('BASE_URL')
 import random
 import logging
 
 logger = logging.getLogger(__name__)
 
-def test_create_material(authorized_api):
+def test_create_material(auth_token):
+    authorized_api = MaterialAPi(base_url)
+    authorized_api.set_token(auth_token)
     name = f"Cotton_{random.randint(1000,9999)}"
     payload={
         "name": name
@@ -15,7 +21,9 @@ def test_create_material(authorized_api):
 
     assert response.status_code == 200
 
-def test_get_materials(authorized_api):
+def test_get_materials(auth_token):
+    authorized_api = MaterialAPi(base_url)
+    authorized_api.set_token(auth_token)
     logger.info("Fetching materials with page=1, limit=5")
     response = authorized_api.get_materials(page=1, limit=5)
     limit = 5
@@ -29,7 +37,9 @@ def test_get_materials(authorized_api):
     assert "results" in body
     assert isinstance(results, list) 
 
-def test_search_materials(authorized_api):
+def test_search_materials(auth_token):
+    authorized_api = MaterialAPi(base_url)
+    authorized_api.set_token(auth_token)
     logger.info("Searching materials with search='cotton', page=1, limit=5")
     response = authorized_api.get_materials(search="cotton", page=1, limit= 5)
     
@@ -43,7 +53,9 @@ def test_search_materials(authorized_api):
     for item in results:
         assert "cotton" in item["name"].lower()
 
-def test_get_material_category(authorized_api):
+def test_get_material_category(auth_token):
+    authorized_api = MaterialAPi(base_url)
+    authorized_api.set_token(auth_token)
     logger.info("Fetching materials with category_type='product'")
     response = authorized_api.get_materials(category_type="product")
 

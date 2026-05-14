@@ -1,13 +1,21 @@
+import os
+from api.purchase_api import PurchaseAPI
+from api.supplier_api import SupplierAPI
+
+base_url = os.getenv('BASE_URL')
 import random
 from utils.logger import get_logger
 
 logger = get_logger()
 
 
-def test_post_purchase(authorized_api):
+def test_post_purchase(auth_token):
+    authorized_api = PurchaseAPI(base_url)
+    authorized_api.set_token(auth_token)
 
-    # Get suppliers
-    res = authorized_api.get_supplier(page=1, limit=5)
+    supplier_api = SupplierAPI(base_url)
+    supplier_api.set_token(auth_token)
+    res = supplier_api.get_supplier(page=1, limit=5)
     assert res.status_code == 200
 
     data = res.json()
@@ -46,7 +54,9 @@ def test_post_purchase(authorized_api):
     assert data["message"] == "Purchase added successfully"
 
 
-def test_get_purchase(authorized_api):
+def test_get_purchase(auth_token):
+    authorized_api = PurchaseAPI(base_url)
+    authorized_api.set_token(auth_token)
 
     logger.info("Fetching purchase list")
 
@@ -67,7 +77,9 @@ def test_get_purchase(authorized_api):
     assert isinstance(purchase_list, list)
     assert len(purchase_list) <= 5
 
-def test_get_by_purchaseId(authorized_api):
+def test_get_by_purchaseId(auth_token):
+    authorized_api = PurchaseAPI(base_url)
+    authorized_api.set_token(auth_token)
 
     logger.info("Getting the list of purchase API")
     response = authorized_api.get_purchase(page= 1, limit = 10)
@@ -87,7 +99,9 @@ def test_get_by_purchaseId(authorized_api):
     logger.info(f"Verifiled purchase ID:{purchaseId}")
 
 
-def test_delete_purchase(authorized_api):
+def test_delete_purchase(auth_token):
+    authorized_api = PurchaseAPI(base_url)
+    authorized_api.set_token(auth_token)
 
     response_purchaseId = authorized_api.get_purchase(page =1, limit = 10)
     assert response_purchaseId.status_code == 200
