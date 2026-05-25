@@ -3,9 +3,9 @@ from api.materials_api import MaterialAPi
 
 base_url = os.getenv('BASE_URL')
 import random
-import logging
+from utils.logger import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger()
 
 def test_create_material(auth_token):
     authorized_api = MaterialAPi(base_url)

@@ -3,8 +3,8 @@ from api.customer_api import CustomerAPI
 
 base_url = os.getenv('BASE_URL')
 import random 
-import logging
-logger = logging.getLogger(__name__)
+from utils.logger import get_logger
+logger = get_logger()
 def test_post_customers(auth_token):
     authorized_api = CustomerAPI(base_url)
     authorized_api.set_token(auth_token)

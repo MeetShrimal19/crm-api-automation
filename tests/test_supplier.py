@@ -1,8 +1,11 @@
 import os
 from api.supplier_api import SupplierAPI
-
-base_url = os.getenv('BASE_URL')
 import random
+from utils.logger import get_logger
+
+logger = get_logger()
+base_url = os.getenv('BASE_URL')
+
 def test_create_supplier(auth_token):
     authorized_api = SupplierAPI(base_url)
     authorized_api.set_token(auth_token)
@@ -13,13 +16,12 @@ def test_create_supplier(auth_token):
         "name":"meet shrimal",
         "phone":random_phone    
     }
-
-
+    logger.info(f"Creating supplier with payload: {payload}")
     response = authorized_api.post(endpoint, json=payload)
     body = response.json()
+    logger.info(f"Create supplier response status: {response.status_code}")
 
     assert response.status_code==201
-
     assert body["success"] is True 
     assert body["message"] == "Supplier added successfully"
 
@@ -27,19 +29,18 @@ def test_supplier_pagination(auth_token):
     authorized_api = SupplierAPI(base_url)
     authorized_api.set_token(auth_token)
 
-    response = authorized_api.get_supplier(page=1, limit=3)
     limit = 3
+    logger.info(f"Fetching suppliers with page=1, limit={limit}")
+    response = authorized_api.get_supplier(page=1, limit=limit)
     body = response.json()
     results = body["results"]["data"]
+    logger.info(f"Fetched {len(results)} suppliers")
 
     assert response.status_code == 200
     assert body["success"] is True 
     assert body["message"] == "Suppliers fetched successfully"
     assert "results" in body
     assert len(results) <= limit 
-    print("result length", len(results))
-    print(limit)
-
 
 def test_update_supplier(auth_token):
     authorized_api = SupplierAPI(base_url)
@@ -49,9 +50,10 @@ def test_update_supplier(auth_token):
     payload={
         "name": "Meet Shrimal"
     }
-
+    logger.info(f"Updating supplier ID {supplier_id} with payload: {payload}")
     response = authorized_api.update_supplier(supplier_id, payload)
     body=response.json()
+    logger.info(f"Update supplier response status: {response.status_code}")
 
     assert response.status_code == 200
     assert body["success"] is True 
@@ -65,17 +67,20 @@ def test_updated_supplier(auth_token):
         "name":"new supplier",
         "phone": random_phone
     }
-
+    logger.info(f"Creating supplier for update test: {create_payload}")
     create_response = authorized_api.post("/api/v1/business/supplier/create", json=create_payload)
     assert create_response.status_code==201
     supplier_id = create_response.json()["results"]["supplier_id"]
+    logger.info(f"Created supplier ID: {supplier_id}")
 
     update_payload={
         "name":"Jaggu Shrimal"
     }
+    logger.info(f"Updating supplier ID {supplier_id} with name: {update_payload['name']}")
     updated_response=authorized_api.update_supplier(supplier_id, update_payload)
     assert updated_response.status_code==200
     
+    logger.info("Fetching suppliers to verify update")
     get_response = authorized_api.get_supplier(limit=100)
     results = get_response.json()["results"]["data"]
 
@@ -85,6 +90,7 @@ def test_updated_supplier(auth_token):
             assert item["name"]== "Jaggu Shrimal"
             updated = True
     assert updated is True
+    logger.info(f"Verified supplier ID {supplier_id} was successfully updated")
 
 def test_delete_supplier(auth_token):
     authorized_api = SupplierAPI(base_url)
@@ -94,13 +100,16 @@ def test_delete_supplier(auth_token):
             "name":"Vinoth",
             "phone":str(phone_number)
         }
-        
+    logger.info(f"Creating supplier for deletion test: {create_payload}")
     create_response = authorized_api.post("/api/v1/business/supplier/create", json=create_payload)
     supplier_id = create_response.json()["results"]["supplier_id"]              
+    logger.info(f"Created supplier ID for deletion: {supplier_id}")
 
+    logger.info(f"Deleting supplier ID: {supplier_id}")
     delete_resource = authorized_api.delete_supplier(supplier_id)
     assert delete_resource.status_code==200
 
+    logger.info("Fetching suppliers to verify deletion")
     get_result= authorized_api.get_supplier(page=1, limit =10)
     results = get_result.json()["results"]
 
@@ -110,4 +119,5 @@ def test_delete_supplier(auth_token):
             found = True
 
     assert found is False
+    logger.info(f"Verified supplier ID {supplier_id} is deleted")
 

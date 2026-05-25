@@ -1,10 +1,10 @@
 import random
-import logging
 import os
 from api.contacts_api import ContactAPI
 from api.auth_api import AuthAPI
+from utils.logger import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger()
 base_url = os.getenv("BASE_URL")
 
 

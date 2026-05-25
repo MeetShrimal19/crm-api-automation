@@ -4,4 +4,5 @@ class BrandsAPI(BaseAPI):
         endpoint = "/api/v1/super-admin/landing/brand/detail"
         return self.get(endpoint)
 
-    def post_brand(self, name, )
+    def post_brand(self, name):
+        pass

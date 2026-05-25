@@ -21,7 +21,17 @@ This is an API test automation framework for the CRM backend.
 
 ## Running Tests
 
-Run the full test suite and generate an HTML report:
+Run the full test suite and automatically generate Allure report data:
 ```bash
-pytest -s -v --html=report.html
+python -m pytest
+```
+
+*(Note: The framework is configured to save test results in an `allure-results` folder automatically.)*
+
+### Viewing the Allure HTML Report
+To view the graphical dashboard, you must have the Allure command-line tool installed on your system (`npm install -g allure-commandline` or `scoop install allure`).
+
+Once the tests finish, serve the report in your browser by running:
+```bash
+allure serve allure-results
 ```
