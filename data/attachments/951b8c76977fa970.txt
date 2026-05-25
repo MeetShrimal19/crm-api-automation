@@ -1,0 +1,8 @@
+INFO     api_logger:base_api.py:35 POST Request -> https://dev-api.profitmanager.in/api/v1/business/auth/login
+INFO     api_logger:base_api.py:36 Payload -> {'email': 'shrimalmeet2001@gmail.com'}
+INFO     api_logger:base_api.py:40 Status Code -> 200
+INFO     api_logger:base_api.py:41 Response -> {"success":true,"code":200,"message":"OTP sent successfully","results":{}}
+INFO     api_logger:base_api.py:35 POST Request -> https://dev-api.profitmanager.in/api/v1/business/auth/verify-otp
+INFO     api_logger:base_api.py:36 Payload -> {'email': 'shrimalmeet2001@gmail.com', 'otp': '123456 '}
+INFO     api_logger:base_api.py:40 Status Code -> 400
+INFO     api_logger:base_api.py:41 Response -> {"success":false,"code":400,"message":"OTP must be 6 digits","results":{}}
